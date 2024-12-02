@@ -1,6 +1,6 @@
 ---
 - name: Create DNS record in BIND
-  hosts: dns_server
+  hosts: all
   become: yes
   vars:
     zone_file_path: "/etc/bind/zone.tbslab.tech" # Adjust to your zone file location
