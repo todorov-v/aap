@@ -25,13 +25,14 @@
     - name: Add the new DNS record
       ansible.builtin.lineinfile:
         path: "{{ zone_file_path }}"
-        line: "{{ dns_record_name }} {{ dns_record_ttl }} IN {{ dns_record_type }} {{ dns_record_ip }}"
+        #line: "{{ dns_record_name }} {{ dns_record_ttl }} IN {{ dns_record_type }} {{ dns_record_ip }}"
+        line: "{{ dns_record_name }}  IN  {{ dns_record_type }} {{ dns_record_ip }}"
         insertafter: "^(?!;).*" # Skip commented lines
       notify: restart_bind
 
     - name: Validate the zone file
       ansible.builtin.command:
-        cmd: "named-checkzone example.com {{ zone_file_path }}"
+        cmd: "named-checkzone tbs.lab {{ zone_file_path }}"
       register: validate_zone
       failed_when: "'zone file OK' not in validate_zone.stdout"
 
