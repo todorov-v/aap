@@ -1,0 +1,28 @@
+---
+- name: Add IP to phpIPAM
+  hosts: all
+  gather_facts: no
+  vars:
+    phpipam_api_url: "https://sf1-ipam.telelink.bg/api/myapp"  # Update with your API URL
+    phpipam_token: "your_api_token_here"              # Replace with your API token
+
+  tasks:
+    - name: Add IP address to phpIPAM
+      uri:
+        url: "{{ phpipam_api_url }}/addresses/"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          token: "{{ phpipam_token }}"
+        body: |
+          {
+            "ip": "{{ IP }}",
+            "hostname": "{{ name }}"
+          }
+        body_format: json
+        return_content: yes
+      register: result
+
+    - name: Display response
+      debug:
+        var: result.json
