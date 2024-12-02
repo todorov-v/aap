@@ -28,7 +28,7 @@
         #line: "{{ dns_record_name }} {{ dns_record_ttl }} IN {{ dns_record_type }} {{ dns_record_ip }}"
         line: "{{ dns_record_name }}               IN {{ dns_record_type }}    {{ dns_record_ip }}"
         insertafter: "^(?!;).*" # Skip commented lines
-      notify: restart_bind
+      notify: reload_bind
 
     - name: Validate the zone file
       ansible.builtin.command:
@@ -36,6 +36,7 @@
       register: validate_zone
       failed_when: "'OK' not in validate_zone.stdout"
 
+  handlers:
     - name: reload_bind
       ansible.builtin.service:
         name: named
