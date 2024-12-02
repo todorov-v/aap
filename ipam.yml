@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: no
   vars:
-    phpipam_api_url: "https:/'{{ ipam_server }}'/api/myapp"  # Update with your API URL
+    phpipam_api_url: "https://{{ ipam_server }}/api/myapp"  # Update with your API URL
     phpipam_token: "your_api_token_here"              # Replace with your API token
 
   tasks:
