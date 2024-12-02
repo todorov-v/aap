@@ -1,6 +1,6 @@
 ---
 - name: Add IP to phpIPAM
-  hosts: all
+  hosts: localhost
   gather_facts: no
   vars:
     phpipam_api_url: "https://sf1-ipam.telelink.bg/api/myapp"  # Update with your API URL
