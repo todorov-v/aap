@@ -40,4 +40,4 @@
     - name: reload_bind
       ansible.builtin.service:
         name: named
-        state: rreload
+        state: reload
