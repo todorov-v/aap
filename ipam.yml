@@ -16,8 +16,8 @@
           token: "{{ phpipam_token }}"
         body: |
           {
-            "ip": "{{ IP }}",
-            "hostname": "{{ name }}"
+            "ip": "{{ variable_ip }}",
+            "hostname": "{{ variable_host }}"
           }
         body_format: json
         return_content: yes
