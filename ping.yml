@@ -1,6 +1,6 @@
 ---
 - name: Test Ansible connectivity
-  hosts: localhost
+  hosts: all
   tasks:
     - name: Ping the target hosts
       ansible.builtin.ping:
