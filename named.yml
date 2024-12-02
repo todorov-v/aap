@@ -36,7 +36,6 @@
       register: validate_zone
       failed_when: "'OK' not in validate_zone.stdout"
 
-  handlers:
     - name: reload_bind
       ansible.builtin.service:
         name: named
