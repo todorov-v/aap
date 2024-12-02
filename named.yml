@@ -37,7 +37,7 @@
       failed_when: "'OK' not in validate_zone.stdout"
 
   handlers:
-    - name: restart_bind
+    - name: reload_bind
       ansible.builtin.service:
-        name: bind9
-        state: restarted
+        name: named
+        state: rreload
