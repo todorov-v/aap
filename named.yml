@@ -1,6 +1,6 @@
 ---
 - name: Create DNS record in BIND
-  hosts: dns_server
+  hosts: localhost
   become: yes
   vars:
     zone_file_path: "/etc/bind/zones/db.example.com" # Adjust to your zone file location
