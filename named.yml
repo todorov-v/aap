@@ -1,9 +1,9 @@
 ---
 - name: Create DNS record in BIND
-  hosts: localhost
+  hosts: dns_server
   become: yes
   vars:
-    zone_file_path: "/etc/bind/zones/db.example.com" # Adjust to your zone file location
+    zone_file_path: "/etc/bind/zone.tbslab.tech" # Adjust to your zone file location
     dns_record_name: "newhost"
     dns_record_ip: "192.168.1.50"
     dns_record_ttl: "3600"  # Time-to-live value
