@@ -1,6 +1,6 @@
 ---
 - name: Assign next free IP in subnet to a hostname
-  hosts: localhost
+  hosts: all
   gather_facts: no
   vars:
     phpipam_api_url: "https://sf1-ipam.telelink.bg/api/ansible"  # Update with your API URL
