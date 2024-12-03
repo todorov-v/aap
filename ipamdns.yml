@@ -33,7 +33,7 @@
         msg: System {{ next_free_ip }} 
 
     - name: Add next free IP address to phpIPAM with hostname
-      ansible.builtin.uri:
+      uri:
         url: "{{ phpipam_api_url }}/addresses/"
         method: POST
         headers:
@@ -47,8 +47,8 @@
           }
         body_format: json
         return_content: yes
-        register: add_ip_response
-        ignore_errors: true
+      register: add_ip_response
+      ignore_errors: true
 
     - name: Fail if IP assignment was unsuccessful
       fail:
