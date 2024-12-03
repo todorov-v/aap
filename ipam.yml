@@ -64,7 +64,7 @@
       register: ip_output
 
     - name: Set fact
-      set_stats:
+      set_fact:
         variable_pass: "{{ ip_output.stdout }}"
 
     - name: Output the variable_ip for debugging
