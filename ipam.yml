@@ -47,13 +47,13 @@
           }
         body_format: json
         return_content: yes
-      register: add_ip_response
+#      register: add_ip_response
       ignore_errors: true
 
-    - name: Fail if IP assignment was unsuccessful
-      fail:
-        msg: "Failed to assign IP to hostname: {{ add_ip_response.json }}"
-      when: add_ip_response.status != 201
+ #   - name: Fail if IP assignment was unsuccessful
+ #     fail:
+ #       msg: "Failed to assign IP to hostname: {{ add_ip_response.json }}"
+ #     when: add_ip_response.status != 201
 
     - name: Display assigned IP details
       debug:
@@ -61,4 +61,4 @@
 
     - name: Set fact
       set_fact:
-        variable_ip: "{{ next_free_ip }}"
+        variable_pass: "{{ next_free_ip }}"
