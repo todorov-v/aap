@@ -42,7 +42,5 @@
       failed_when: "'OK' not in validate_zone.stdout"
 
   handlers:
-    - name: reload_bind
-      ansible.builtin.systemd_service:
-        name: named
-        state: reload
+    - name: reload rndc service to load new records
+      shell: rndc freeze && rndc reload && rndc thaw
