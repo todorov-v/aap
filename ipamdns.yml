@@ -47,6 +47,7 @@
               "subnetId": "{{ subnet_id }}"
             }
           body_format: json
+          status_code: 201
           return_content: yes
         register: add_ip_response
 
