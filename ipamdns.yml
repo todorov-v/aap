@@ -22,7 +22,7 @@
     - name: Fail if no free IP address is available
       fail:
         msg: "No free IP address found in subnet {{ subnet_id }}!"
-      when: free_ip_response.status != 201 or not free_ip_response.json
+      when: free_ip_response.status != 200 or 200 or not free_ip_response.json
 
     - name: Extract next free IP
       set_fact:
