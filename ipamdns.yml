@@ -33,21 +33,28 @@
         msg: System {{ next_free_ip }} 
 
     - name: Add next free IP address to phpIPAM with hostname
-      uri:
-        url: "{{ phpipam_api_url }}/addresses/"
-        method: POST
-        headers:
-          Content-Type: "application/json"
-          token: "{{ phpipam_token }}"
-        body: |
-          {
-            "ip": "{{ next_free_ip }}",
-            "hostname": "{{ name }}",
-            "subnetId": "{{ subnet_id }}"
-          }
-        body_format: json
-        status_codes: 201
-        return_content: yes
-      register: add_ip_response
+      ansible.builtin.uri:
+        uri:
+          url: "{{ phpipam_api_url }}/addresses/"
+          method: POST
+          headers:
+            Content-Type: "application/json"
+            token: "{{ phpipam_token }}"
+          body: |
+            {
+              "ip": "{{ next_free_ip }}",
+              "hostname": "{{ name }}",
+              "subnetId": "{{ subnet_id }}"
+            }
+          body_format: json
+          return_content: yes
+        register: add_ip_response
 
- 
+    - name: Fail if IP assignment was unsuccessful
+      fail:
+        msg: "Failed to assign IP to hostname: {{ add_ip_response.json }}"
+      when: add_ip_response.status != 201
+
+    - name: Display assigned IP details
+      debug:
+        msg: "Successfully assigned IP {{ next_free_ip }} to hostname {{ name }}."
