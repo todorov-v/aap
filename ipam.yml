@@ -66,3 +66,7 @@
     - name: Set fact
       set_fact:
         variable_pass: "{{ ip_output.stdout }}"
+
+    - name: Output the variable_ip for debugging
+      debug:
+        msg: "The generated IP is {{ variable_pass }}"
