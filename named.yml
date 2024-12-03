@@ -1,7 +1,4 @@
 ---
-- name: Debug result from IPAM job
-  debug:
-    var: variable_pass
 - name: Create DNS record in BIND
   hosts: all
   become: yes
