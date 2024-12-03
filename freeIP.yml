@@ -1,0 +1,28 @@
+---
+- name: Assign next free IP in subnet to a hostname
+  hosts: all
+  gather_facts: no
+  vars:
+    phpipam_api_url: "https://sf1-ipam.telelink.bg/api/ansible"  # Update with your API URL
+    phpipam_token: "lUyiiSJbFvUlahuIVfmJp0kmHKjehLAf"              # Replace with your API token
+    subnet_id: 8                                      # The ID of the subnet to query
+
+  tasks:
+    - name: Get next free IP address in subnet
+      uri:
+        url: "{{ phpipam_api_url }}/subnets/{{ subnet_id }}/first_free/"
+        method: GET
+        headers:
+          Content-Type: "application/json"
+          token: "{{ phpipam_token }}"
+        return_content: yes
+      register: free_ip_response
+
+    - name: Fail if no free IP address is available
+      fail:
+        msg: "No free IP address found in subnet {{ subnet_id }}!"
+      when: free_ip_response.status != 200 or not free_ip_response.json
+
+    - name: Extract next free IP
+      set_fact:
+        next_free_ip: "{{ free_ip_response.json.data }}"

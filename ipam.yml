@@ -4,8 +4,8 @@
   gather_facts: no
   vars:
     ipam: 'sf1-ipam.telelink.bg'
-    phpipam_api_url: "https://{{ ipam }}/api/myapp"  # Update with your API URL
-    phpipam_token: "your_api_token_here"              # Replace with your API token
+    phpipam_api_url: "https://{{ ipam }}/api/ansible"  # Update with your API URL
+    phpipam_token: "lUyiiSJbFvUlahuIVfmJp0kmHKjehLAf"              # Replace with your API token
 
   tasks:
     - name: Add IP address to phpIPAM

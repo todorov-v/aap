@@ -1,0 +1,54 @@
+---
+- name: Assign next free IP in subnet to a hostname
+  hosts: all
+  gather_facts: no
+  vars:
+    phpipam_api_url: "http://phpipam.local/api/myapp"  # Update with your API URL
+    phpipam_token: "your_api_token_here"              # Replace with your API token
+    subnet_id: 6                                      # The ID of the subnet to query
+
+  tasks:
+    - name: Get next free IP address in subnet
+      uri:
+        url: "{{ phpipam_api_url }}/subnets/{{ subnet_id }}/first_free/"
+        method: GET
+        headers:
+          Content-Type: "application/json"
+          token: "{{ phpipam_token }}"
+        return_content: yes
+      register: free_ip_response
+
+    - name: Fail if no free IP address is available
+      fail:
+        msg: "No free IP address found in subnet {{ subnet_id }}!"
+      when: free_ip_response.status != 200 or not free_ip_response.json
+
+    - name: Extract next free IP
+      set_fact:
+        next_free_ip: "{{ free_ip_response.json.data }}"
+
+    - name: Add next free IP address to phpIPAM with hostname
+      uri:
+        url: "{{ phpipam_api_url }}/addresses/"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          token: "{{ phpipam_token }}"
+        body: |
+          {
+            "ip": "{{ next_free_ip }}",
+            "hostname": "{{ name }}",
+            "subnetId": "{{ subnet_id }}"
+          }
+        body_format: json
+        return_content: yes
+      register: add_ip_response
+
+    - name: Fail if IP assignment was unsuccessful
+      fail:
+        msg: "Failed to assign IP to hostname: {{ add_ip_response.json }}"
+      when: add_ip_response.status != 201
+
+    - name: Display assigned IP details
+      debug:
+        msg: "Successfully assigned IP {{ next_free_ip }} to hostname {{ name }}."
