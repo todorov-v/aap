@@ -59,13 +59,10 @@
     - name: Display assigned IP details
       debug:
         msg: "Successfully assigned IP {{ next_free_ip }} to hostname {{ name }}."
-    - name: Generate variable_ip
-      shell: echo {{ next_free_ip }}
-      register: ip_output
 
-    - name: Set fact
-      set_fact:
-        variable_pass: "{{ ip_output.stdout }}"
+    - name: Set Stats
+      set_stats:
+        variable_pass: "{{ next_free_ip }}"
 
     - name: Output the variable_ip for debugging
       debug:
