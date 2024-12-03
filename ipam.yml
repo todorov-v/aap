@@ -62,4 +62,4 @@
 
     - name: Set fact
       set_fact:
-        variable_pass: "{{ next_free_ip }}"
+        variable_pass: "{{ next_free_ip.stdout }}"
