@@ -5,7 +5,8 @@
   vars:
     zone_file_path: "/etc/named/tbs.lab.zone" # Adjust to your zone file location
     dns_record_name: '{{ variable_host }}'
-    dns_record_ip: "{{ workflow_outputs['VT_IPAM Create']['{{ variable_ip }}'] }}"
+ #   dns_record_ip: "{{ workflow_outputs['VT_IPAM Create']['{{ variable_ip }}'] }}"
+    dns_record_ip: "variable_ip"
     dns_record_ttl: "3600"  # Time-to-live value
     dns_record_type: "A"    # Record type, e.g., A, CNAME, etc.
 
