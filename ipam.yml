@@ -58,3 +58,7 @@
     - name: Display assigned IP details
       debug:
         msg: "Successfully assigned IP {{ next_free_ip }} to hostname {{ name }}."
+
+    - name: Set fact
+      set_fact:
+        variable_ip: "{{ next_free_ip }}"
