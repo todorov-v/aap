@@ -50,11 +50,4 @@
         return_content: yes
       register: add_ip_response
 
-    - name: Fail if IP assignment was unsuccessful
-      fail:
-        msg: "Failed to assign IP to hostname: {{ add_ip_response.json }}"
-      when: add_ip_response.status != 201
-
-    - name: Display assigned IP details
-      debug:
-        msg: "Successfully assigned IP {{ next_free_ip }} to hostname {{ name }}."
+ 
