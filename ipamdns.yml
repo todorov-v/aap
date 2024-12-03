@@ -5,7 +5,7 @@
   vars:
     phpipam_api_url: "https://sf1-ipam.telelink.bg/api/ansible"  # Update with your API URL
     phpipam_token: "lUyiiSJbFvUlahuIVfmJp0kmHKjehLAf"              # Replace with your API token
-    subnet_id: 8                                      # The ID of the subnet to query
+    subnet_id: 10                                      # The ID of the subnet to query
     name: "{{ variable_host }}"
 
   tasks:
