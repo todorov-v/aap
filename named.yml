@@ -13,7 +13,7 @@
   tasks:
     - name: Use the passed variable_ip
       debug:
-        msg: "The IP received is {{ variable_ipam }}"
+        msg: "The IP received is {{ variable_pass }}"
 
     - name: Ensure the zone file exists
       ansible.builtin.stat:

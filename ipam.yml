@@ -64,7 +64,3 @@
       set_stats:
         data:
           variable_pass: "{{ next_free_ip }}"
-
-    - name: Output the variable_ip for debugging
-      debug:
-        msg: "The generated IP is {{ variable_pass }}"
