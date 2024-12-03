@@ -62,7 +62,8 @@
 
     - name: Set Stats
       set_stats:
-        variable_pass: "{{ next_free_ip }}"
+        data:
+          variable_pass: "{{ next_free_ip }}"
 
     - name: Output the variable_ip for debugging
       debug:
