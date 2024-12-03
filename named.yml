@@ -33,7 +33,7 @@
         #line: "{{ dns_record_name }} {{ dns_record_ttl }} IN {{ dns_record_type }} {{ dns_record_ip }}"
         line: "{{ dns_record_name }}    IN  {{ dns_record_type }} {{ dns_record_ip }}"
         insertafter: "^(?!;).*" # Skip commented lines
-      notify: reload_bind
+      notify: reload rndc service to load new records
 
     - name: Validate the zone file
       ansible.builtin.command:
