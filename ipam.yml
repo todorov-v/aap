@@ -27,8 +27,8 @@
     - name: Extract next free IP
       set_fact:
         next_free_ip: "{{ free_ip_response.json.data }}"
-      register: free_ip_response
-      
+      register: next_free_ip
+
     - name: Print the free IP
       ansible.builtin.debug:
         msg: System {{ next_free_ip }} 
