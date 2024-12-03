@@ -43,6 +43,6 @@
 
   handlers:
     - name: reload_bind
-      ansible.builtin.service:
+      ansible.builtin.systemd_service:
         name: named
         state: reload
