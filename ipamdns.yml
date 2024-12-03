@@ -49,6 +49,7 @@
         status_code: 201
         return_content: yes
         register: add_ip_response
+        ignore_errors: true
 
     - name: Fail if IP assignment was unsuccessful
       fail:
