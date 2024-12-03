@@ -46,9 +46,9 @@
             "subnetId": "{{ subnet_id }}"
           }
         body_format: json
-        return_content: yes
+#        return_content: yes
 #      register: add_ip_response
-      ignore_errors: true
+#      ignore_errors: true
 
  #   - name: Fail if IP assignment was unsuccessful
  #     fail:
