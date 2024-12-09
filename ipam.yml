@@ -3,8 +3,8 @@
   hosts: localhost
   gather_facts: no
   vars:
-    phpipam_api_url: "https://sf1-ipam.telelink.bg/api/ansible"  # Update with your API URL
-    phpipam_token: "lUyiiSJbFvUlahuIVfmJp0kmHKjehLAf"              # Replace with your API token
+    phpipam_api_url: "https://sf1-ipam.telelink.bg/api/ansible"  # API URL
+    phpipam_token: "lUyiiSJbFvUlahuIVfmJp0kmHKjehLAf"              # API token
     subnet_id: 11                                      # The ID of the subnet to query
     name: "{{ variable_host }}"
 
