@@ -25,7 +25,7 @@
 
     - name: List vms using FIQL filter string
       ntnx_vms_info:
-        filter_string: "vm_name== AnsibleAP"
+        filter_string: "vm_name=={{vm_name}};power_state==off"
       register: result
       ignore_errors: True
 
