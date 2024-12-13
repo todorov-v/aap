@@ -13,7 +13,7 @@
   tasks:
     - name: Setting Variables
       set_fact:
-        vm_name: ""
+        vm_name: "AnsibleAP"
 
     - name: List vms using name filter criteria
       ntnx_vms_info:
