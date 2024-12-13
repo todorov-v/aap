@@ -6,9 +6,9 @@
     - nutanix.ncp
   module_defaults:
     group/nutanix.ncp.ntnx:
-      nutanix_host: "{{ pc_ip }}"
-      nutanix_username: "{{ vault_pc_username }}"
-      nutanix_password: "{{ vault_pc_password }}"
+      nutanix_host: "192.168.173.17"
+      nutanix_username: "admin"
+      nutanix_password: "dwoo.XEd3$"
       validate_certs: false
 
   tasks:
