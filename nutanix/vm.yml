@@ -68,7 +68,7 @@
     debug:
       msg: '{{ output }}'
 
-  - name: delete VM
-    ntnx_vms:
-      state: absent
-      vm_uuid: "{{output.vm_uuid}}"
+ # - name: delete VM
+ #   ntnx_vms:
+ #     state: absent
+ #     vm_uuid: "{{output.vm_uuid}}"
