@@ -15,7 +15,7 @@
     set_fact:
         cluster_name: "CLS"
         script_path: ""
-        subnet_name: 'TBS|TEST|Generic-44'
+        subnet_name: "Test"
         image_name: "RHEL-disk001.vmdk"
         password: "12345678"
         fqdn: ""
