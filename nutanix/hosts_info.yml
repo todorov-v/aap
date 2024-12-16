@@ -8,7 +8,7 @@
     group/nutanix.ncp.ntnx:
       nutanix_host: "{{ lookup('env', 'PRISM_CENTRAL_URL') }}"
       nutanix_username: "{{ lookup('env', 'PRISM_CENTRAL_USERNAME') }}"
-      nutanix_password: "{{ lookup('env', 'PRISM_CENTRAL_PASSWORD') }}"
+      nutanix_password: "dwoo.XEd3$"
       validate_certs: false
 
   tasks:
