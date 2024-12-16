@@ -51,7 +51,7 @@
               name: "{{cluster_name}}"
       disks:
         - type: "DISK"
-          size_gb: 30
+          size_gb: 40
           bus: "SATA"
           clone_image:
             name: "{{ image_name }}"
