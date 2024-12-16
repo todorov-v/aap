@@ -6,9 +6,9 @@
     - nutanix.ncp
   module_defaults:
     group/nutanix.ncp.ntnx:
-      nutanix_host: 192.168.173.17
-      nutanix_username: admin
-      nutanix_password: dwoo.XEd3$
+      nutanix_host: "{{ lookup('env', 'PRISM_CENTRAL_URL') }}"
+      nutanix_username: "{{ lookup('env', 'PRISM_CENTRAL_USERNAME') }}"
+      nutanix_password: "{{ lookup('env', 'PRISM_CENTRAL_PASSWORD') }}"
       validate_certs: false
   tasks:
     - name: Setting Variables
