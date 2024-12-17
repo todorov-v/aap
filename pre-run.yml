@@ -35,3 +35,7 @@
       debug:
         msg: "VM name '{{ vm_name_to_check }}' does not exist in the database."
       when: vm_check_result.query_result[0][0]["vm_count"] == 0
+      
+    - name: Display the username
+      debug:
+        msg: "This job was started by {{ awx_user_name }}"
