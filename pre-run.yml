@@ -1,37 +1,32 @@
 ---
-- name: Check if VM name exists in MariaDB and send email if not
+- name: Check if VM name exists in MariaDB
   hosts: localhost
-  gather_facts: false
-  collections:
-    - community.mysql
-    - community.general  # For the mail module
+  gather_facts: no
   vars:
     hostname: "{{ variable_host }}"
     requestorname: "{{ variable_requestor }}"
+    db_host: "127.0.0.1"        # MariaDB host
+    db_user: "your_user"        # MariaDB username
+    db_password: "your_password"  # MariaDB password
+    db_name: "vm_inventory"     # Database name
+    vm_name_to_check: "MyVM"    # VM name to check
+
   tasks:
-    - name: Check if VM name exists in MariaDB
+    - name: Check if the VM name exists in the database
       community.mysql.mysql_query:
-        login_host: "10.10.10.11"    # Replace with your MariaDB host
-        login_user: "{{ lookup('env', 'DB_USERNAME') }}"    # Replace with your MariaDB user
-        login_password: "{{ lookup('env', 'DB_PASSWORD') }}"  # Replace with your MariaDB password
-        login_db: "{{ lookup('env', 'DB_NAME') }}"
-        query: |
-          SELECT COUNT(*) AS count FROM vm_details WHERE name = "{{ hostname }}";
+        login_host: "10.10.10.11"
+        login_user: "{{ lookup('env', 'DB_USERNAME') }}"
+        login_password: "{{ lookup('env', 'DB_PASSWORD') }}"
+        database: "{{ lookup('env', 'DB_NAME') }}"
+        query: "SELECT COUNT(*) AS vm_count FROM vm_details WHERE name = '{{ hostname }}';"
       register: vm_check_result
-#      delegate_to: localhost
 
-    - name: Debug query result
+    - name: Debug the result
       debug:
-        var: vm_check_result
+        msg: "VM name '{{ hostname }}' exists in the database." 
+      when: vm_check_result.results[0].vm_count > 0
 
-    - name: VM exist
+    - name: Debug message for non-existence
       debug:
-        msg: "The VM name '{{ hostname }}' already exists in the database."
- #       msg: vm_check_result.query_result[0]
-      when: vm_check_result.query_result[0] == count:0
-
-    - name: VM name does not exist
-      debug:
-        msg: "The VM name '{{ hostname }}' doesnot exists in the database."
- #       msg: vm_check_result.query_result[0].count
-      when: vm_check_result.query_result[0] == count:1
+        msg: "VM name '{{ hostname }}' does not exist in the database."
+      when: vm_check_result.results[0].vm_count == 0
