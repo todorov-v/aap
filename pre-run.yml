@@ -25,12 +25,13 @@
         var: vm_check_result
 
     - name: Fail if VM name exists
-      fail:
+      debug:
         msg: "The VM name '{{ hostname }}' already exists in the database."
       when: vm_check_result.query_result[0].count | int > 0
 
     - name: Send email notification if VM name does not exist
-      msg: "The VM name '{{ hostname }}' doesnot exists in the database."
+      debug:
+        msg: "The VM name '{{ hostname }}' doesnot exists in the database."
  #     community.general.mail:
   #      host: "smtp.yourmailserver.com"   # Replace with your SMTP server
  #       port: 587                         # Update the port if necessary
