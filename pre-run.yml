@@ -18,7 +18,7 @@
         query: |
           SELECT COUNT(*) AS count FROM vm_details WHERE name = "{{ hostname }}";
       register: vm_check_result
-      delegate_to: localhost
+#      delegate_to: localhost
 
     - name: Debug query result
       debug:
