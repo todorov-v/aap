@@ -12,7 +12,7 @@
       community.mysql.mysql_query:
         login_host: "aap.tbs.lab"    # Replace with your MariaDB host
         login_user: "{{ lookup('env', 'DB_USERNAME') }}"    # Replace with your MariaDB user
-        login_password: "password"  # Replace with your MariaDB password
+        login_password: password  # Replace with your MariaDB password
         login_db: "vm_inventory"
         query: |
           INSERT INTO vm_details (name, memory_mb, num_vcpus, ip_address, requestor_name)
