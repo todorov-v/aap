@@ -11,10 +11,10 @@
   tasks:
     - name: Check if VM name exists in MariaDB
       community.mysql.mysql_query:
-        login_host: "{{ lookup('env', 'MARIADB_HOST') }}"    # Replace with your MariaDB host
-        login_user: "{{ lookup('env', 'MARIADB_USER') }}"    # Replace with your MariaDB user
-        login_password: "{{ lookup('env', 'MARIADB_PASSWORD') }}"  # Replace with your MariaDB password
-        database: "vm_inventory"
+        login_host: "{{ lookup('env', 'DB_HOST') }}"    # Replace with your MariaDB host
+        login_user: "{{ lookup('env', 'DB_USERNAME') }}"    # Replace with your MariaDB user
+        login_password: "{{ lookup('env', 'DB_PASSWORD') }}"  # Replace with your MariaDB password
+        database: "{{ lookup('env', 'DB_NAME') }}"
         query: |
           SELECT COUNT(*) AS count FROM vm_details WHERE name = "{{ hostname }}";
       register: vm_check_result
