@@ -29,22 +29,22 @@
         msg: "The VM name '{{ hostname }}' already exists in the database."
       when: vm_check_result.query_result[0].count | int > 0
 
-    - name: Send email notification if VM name does not exist
-      community.general.mail:
-        host: "smtp.yourmailserver.com"   # Replace with your SMTP server
-        port: 587                         # Update the port if necessary
-        username: "your_smtp_username"    # SMTP username if authentication is required
-        password: "your_smtp_password"    # SMTP password
-        to: "{{ requestor_email }}"
-        subject: "VM Name Available for Provisioning"
-        body: |
-          Hello,
-
-          The VM name '{{ hostname }}' is available for provisioning.
-
-          Please proceed with the next steps to provision the VM.
-
-          Regards,
-          Ansible Automation
-        subtype: plain
-      when: vm_check_result.query_result[0].count | int == 0
+  #  - name: Send email notification if VM name does not exist
+ #     community.general.mail:
+  #      host: "smtp.yourmailserver.com"   # Replace with your SMTP server
+ #       port: 587                         # Update the port if necessary
+ #       username: "your_smtp_username"    # SMTP username if authentication is required
+  #      password: "your_smtp_password"    # SMTP password
+#        to: "{{ requestor_email }}"
+ #       subject: "VM Name Available for Provisioning"
+  #      body: |
+ #         Hello,
+#
+ #         The VM name '{{ hostname }}' is available for provisioning.
+#
+ #         Please proceed with the next steps to provision the VM.
+#
+ #         Regards,
+  #        Ansible Automation
+  #      subtype: plain
+  #    when: vm_check_result.query_result[0].count | int == 0
