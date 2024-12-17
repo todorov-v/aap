@@ -1,0 +1,26 @@
+---
+- name: Check if VM name exists in MariaDB and send email if not
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - community.mysql
+    - community.general  # For the mail module
+  vars_prompt:
+    - name: "hostname"
+      prompt: "Enter the hostname for the new VM"
+      private: no
+    - name: "requestor_email"
+      prompt: "Enter the requestor's email address"
+      private: no
+  tasks:
+    - name: Write VM details to MariaDB
+      community.mysql.mysql_query:
+        login_host: "localhost"    # Replace with your MariaDB host
+        login_user: "root"    # Replace with your MariaDB user
+        login_password: ".root"  # Replace with your MariaDB password
+        login_db: "vm_inventory"
+        query: |
+          INSERT INTO vm_details (name, memory_mb, num_vcpus, ip_address, requestor_name)
+          VALUES ("{{ hostname }}", 4096, 2, "192.168.1.1", "vladimir.todorov@tbs.tech");
+      delegate_to: localhost
+~
