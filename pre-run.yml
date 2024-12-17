@@ -24,12 +24,12 @@
       debug:
         var: vm_check_result
 
-    - name: Fail if VM name exists
+    - name: VM exist
       debug:
         msg: "The VM name '{{ hostname }}' already exists in the database."
       when: vm_check_result.query_result[0].count | int > 0
 
-    - name: Send email notification if VM name does not exist
+    - name: VM name does not exist
       debug:
         msg: "The VM name '{{ hostname }}' doesnot exists in the database."
  #     community.general.mail:
