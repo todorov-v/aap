@@ -5,13 +5,8 @@
   collections:
     - community.mysql
     - community.general  # For the mail module
-  vars_prompt:
-    - name: "hostname"
-      prompt: "Enter the hostname for the new VM"
-      private: no
-    - name: "requestor_email"
-      prompt: "Enter the requestor's email address"
-      private: no
+  vars:
+    hostname: "hostname"
   tasks:
     - name: Write VM details to MariaDB
       community.mysql.mysql_query:
