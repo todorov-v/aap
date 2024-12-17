@@ -27,11 +27,11 @@
     - name: VM exist
       debug:
         msg: "The VM name '{{ hostname }}' already exists in the database."
-        msg: vm_check_result.query_result[0]
-      when: vm_check_result.query_result[0] | int > 0
+ #       msg: vm_check_result.query_result[0]
+      when: vm_check_result.query_result[0] == count:0
 
     - name: VM name does not exist
       debug:
         msg: "The VM name '{{ hostname }}' doesnot exists in the database."
-        msg: vm_check_result.query_result[0].count
-      when: vm_check_result.query_result[0] | int == 0
+ #       msg: vm_check_result.query_result[0].count
+      when: vm_check_result.query_result[0] == count:1
