@@ -10,7 +10,7 @@
   tasks:
     - name: Write VM details to MariaDB
       community.mysql.mysql_query:
-        login_host: "localhost"    # Replace with your MariaDB host
+        login_host: "aap.tbs.lab"    # Replace with your MariaDB host
         login_user: "root"    # Replace with your MariaDB user
         login_password: ".root"  # Replace with your MariaDB password
         login_db: "vm_inventory"
