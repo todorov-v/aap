@@ -21,16 +21,16 @@
         query: "SELECT COUNT(*) AS vm_count FROM vm_details WHERE name = '{{ hostname }}';"
       register: vm_check_result
 
-    - name: Inspect the structure of vm_check_result
+    - name: Debug the structure of vm_check_result
       debug:
         var: vm_check_result
 
     - name: Debug the result if VM exists
       debug:
         msg: "VM name '{{ vm_name_to_check }}' exists in the database."
-      when: vm_check_result.query_result[0][0] > 0
+      when: vm_check_result.query_result[0]['vm_count'] > 0
 
     - name: Debug message for non-existence
       debug:
         msg: "VM name '{{ vm_name_to_check }}' does not exist in the database."
-      when: vm_check_result.query_result[0][0] == 0
+      when: vm_check_result.query_result[0]['vm_count'] == 0
