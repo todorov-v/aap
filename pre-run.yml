@@ -13,7 +13,7 @@
       community.mysql.mysql_query:
         login_host: "{{ lookup('env', 'DB_HOST') }}"    # Replace with your MariaDB host
         login_user: "{{ lookup('env', 'DB_USERNAME') }}"    # Replace with your MariaDB user
-        login_password: "{{ lookup('env', 'DB_PASSWORD') }}"  # Replace with your MariaDB password
+        login_password: ".root"  # Replace with your MariaDB password
         login_db: "{{ lookup('env', 'DB_NAME') }}"
         query: |
           SELECT COUNT(*) AS count FROM vm_details WHERE name = "{{ hostname }}";
