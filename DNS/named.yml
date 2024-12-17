@@ -1,0 +1,46 @@
+---
+- name: Create DNS record in BIND
+  hosts: all
+  become: yes
+  vars:
+    zone_file_path: "/etc/named/tbs.lab.zone" # Adjust to your zone file location
+    dns_record_name: '{{ variable_host }}'
+    dns_record_ip: "{{ variable_pass }}"
+    #dns_record_ip: '{{ variable_ipam }}'
+    dns_record_ttl: "3600"  # Time-to-live value
+    dns_record_type: "A"    # Record type, e.g., A, CNAME, etc.
+
+  tasks:
+    - name: Use the passed variable_ip
+      debug:
+        msg: "The IP received is {{ variable_pass }}"
+
+    - name: Ensure the zone file exists
+      ansible.builtin.stat:
+        path: "{{ zone_file_path }}"
+      register: zone_file_check
+
+    - name: Backup the original zone file
+      ansible.builtin.copy:
+        src: "{{ zone_file_path }}"
+        dest: "{{ zone_file_path }}.backup"
+        remote_src: yes
+      when: zone_file_check.stat.exists
+
+    - name: Add the new DNS record
+      ansible.builtin.lineinfile:
+        path: "{{ zone_file_path }}"
+        #line: "{{ dns_record_name }} {{ dns_record_ttl }} IN {{ dns_record_type }} {{ dns_record_ip }}"
+        line: "{{ dns_record_name }}    IN  {{ dns_record_type }} {{ dns_record_ip }}"
+        insertafter: "^(?!;).*" # Skip commented lines
+      notify: reload rndc service to load new records
+
+    - name: Validate the zone file
+      ansible.builtin.command:
+        cmd: "named-checkzone tbs.lab {{ zone_file_path }}"
+      register: validate_zone
+      failed_when: "'OK' not in validate_zone.stdout"
+
+  handlers:
+    - name: reload rndc service to load new records
+      shell: rndc freeze && rndc reload && rndc thaw

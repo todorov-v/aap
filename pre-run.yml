@@ -1,0 +1,50 @@
+---
+- name: Check if VM name exists in MariaDB and send email if not
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - community.mysql
+    - community.general  # For the mail module
+  vars:
+    hostname: "{{ variable_host }}"
+    requestorname: "{{ variable_requestor }}"
+  tasks:
+    - name: Check if VM name exists in MariaDB
+      community.mysql.mysql_query:
+        login_host: "{{ lookup('env', 'MARIADB_HOST') }}"    # Replace with your MariaDB host
+        login_user: "{{ lookup('env', 'MARIADB_USER') }}"    # Replace with your MariaDB user
+        login_password: "{{ lookup('env', 'MARIADB_PASSWORD') }}"  # Replace with your MariaDB password
+        database: "vm_inventory"
+        query: |
+          SELECT COUNT(*) AS count FROM vm_details WHERE name = "{{ hostname }}";
+      register: vm_check_result
+      delegate_to: localhost
+
+    - name: Debug query result
+      debug:
+        var: vm_check_result
+
+    - name: Fail if VM name exists
+      fail:
+        msg: "The VM name '{{ hostname }}' already exists in the database."
+      when: vm_check_result.query_result[0].count | int > 0
+
+    - name: Send email notification if VM name does not exist
+      community.general.mail:
+        host: "smtp.yourmailserver.com"   # Replace with your SMTP server
+        port: 587                         # Update the port if necessary
+        username: "your_smtp_username"    # SMTP username if authentication is required
+        password: "your_smtp_password"    # SMTP password
+        to: "{{ requestor_email }}"
+        subject: "VM Name Available for Provisioning"
+        body: |
+          Hello,
+
+          The VM name '{{ hostname }}' is available for provisioning.
+
+          Please proceed with the next steps to provision the VM.
+
+          Regards,
+          Ansible Automation
+        subtype: plain
+      when: vm_check_result.query_result[0].count | int == 0
