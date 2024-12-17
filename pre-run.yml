@@ -1,6 +1,6 @@
 ---
 - name: Check if VM name exists in MariaDB and send email if not
-  hosts: localhost
+  hosts: all
   gather_facts: false
   collections:
     - community.mysql
