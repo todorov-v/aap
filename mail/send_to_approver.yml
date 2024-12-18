@@ -1,0 +1,31 @@
+---
+- name: Send email to approver
+  hosts: localhost
+  gather_facts: no
+  vars:
+    approver_email: "vladimir.todorov@tbs.tech"
+    request_number: "12345"
+    smtp_server: "smtp.office365.com"
+    smtp_port: 587
+    smtp_username: "vladimir.todorov@tbs.tech"
+    smtp_password: "ZBoiiioo2512CT"
+  tasks:
+    - name: Send email to approver
+      community.general.mail:
+        host: "{{ smtp_server }}"
+        port: "{{ smtp_port }}"
+        username: "{{ smtp_username }}"
+        password: "{{ smtp_password }}"
+        secure: starttls
+        from: "{{ smtp_username }}"
+        to:
+          - "{{ approver_email }}"
+        subject: "Please approve request number {{ request_number }}"
+        body: |
+          Dear Approver,
+
+          Please approve request number {{ request_number }}.
+
+          Best regards,
+          Automation System
+      delegate_to: localhost
