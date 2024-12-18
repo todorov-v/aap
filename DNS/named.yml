@@ -4,7 +4,7 @@
   become: yes
   vars:
     zone_file_path: "/etc/named/tbs.lab.zone" # Adjust to your zone file location
-    dns_record_name: '{{ variable_host }}'
+    dns_record_name: '{{ variable_hostname }}'
     dns_record_ip: "{{ variable_pass }}"
     #dns_record_ip: '{{ variable_ipam }}'
     dns_record_ttl: "3600"  # Time-to-live value

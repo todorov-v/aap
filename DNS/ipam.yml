@@ -6,7 +6,7 @@
     phpipam_api_url: "https://sf1-ipam.telelink.bg/api/ansible"  # API URL
     phpipam_token: "lUyiiSJbFvUlahuIVfmJp0kmHKjehLAf"              # API token
     subnet_id: 11                                      # The ID of the subnet to query
-    name: "{{ variable_host }}"
+    name: "{{ variable_hostname }}"
 
   tasks:
     - name: Get next free IP address in subnet
@@ -17,6 +17,7 @@
           Content-Type: "application/json"
           token: "{{ phpipam_token }}"
         return_content: yes
+        validate_certs: no
       register: free_ip_response
 
     - name: Fail if no free IP address is available
