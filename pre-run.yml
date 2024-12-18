@@ -5,11 +5,11 @@
   vars:
     hostname: "{{ variable_hostname }}"
     requestorname: "{{ variable_requestor }}"
-    db_host: "127.0.0.1"        # MariaDB host
-    db_user: "your_user"        # MariaDB username
-    db_password: "your_password"  # MariaDB password
-    db_name: "vm_inventory"     # Database name
-    vm_name_to_check: "MyVM"    # VM name to check
+#    db_host: "127.0.0.1"        # MariaDB host
+#    db_user: "your_user"        # MariaDB username
+#    db_password: "your_password"  # MariaDB password
+#    db_name: "vm_inventory"     # Database name
+#    vm_name_to_check: "MyVM"    # VM name to check
 
   tasks:
     - name: Check if the VM name exists in the database
@@ -38,4 +38,9 @@
       
     - name: Display the username
       debug:
-        msg: "This job was started by {{ awx_user_name }}"
+        msg: "This job was started by {{ awx_user_name }}@tbs.tech"
+        
+    - name: Set Stats
+      set_stats:
+        data:
+          variable_requestor: "{{ awx_user_name }}@tbs.tech"
