@@ -16,19 +16,20 @@
     num_vcpus:  "1"
     memory_mb:  "2"
     requestor_name:  "vladimir.todorov@tbs.tech"
+    vm_os: "Rocky"
   tasks:
   - name: Rewrite vm_os based on conditions
-  set_fact:
-    vm_os: >-
-      {% if vm_os == "Rocky9.4" %}
-        Rocky 9.4 minimal
-      {% elif vm_os == "Ubuntu24" %}
-        Ubuntu24 LTS
-      {% elif vm_os == "Windows2022" %}
-        Windows 2022 Datacenter Eval
-      {% else %}
-        Unknown OS
-      {% endif %}
+    set_fact:
+      vm_os: >-
+        {% if vm_os == "Rocky9.4" %}
+          Rocky 9.4 minimal
+        {% elif vm_os == "Ubuntu24" %}
+          Ubuntu24 LTS
+        {% elif vm_os == "Windows2022" %}
+          Windows 2022 Datacenter Eval
+        {% else %}
+          Unknown OS
+        {% endif %}
 
   - name: Debug the rewritten vm_os value
     debug:
