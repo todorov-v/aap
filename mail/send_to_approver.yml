@@ -3,12 +3,12 @@
   hosts: localhost
   gather_facts: no
   vars:
-    approver_email: '{{ variable_user }}'
+    approver_email: "{{ lookup('env', 'SMTP_USERNAME') }}"
     request_number: "12345"
-    smtp_server: "smtp.office365.com"
-    smtp_port: 587
-    smtp_username: '{{ variable_user }}'
-    smtp_password: '{{ variable_pass }}'
+    smtp_server: "{{ lookup('env', 'SMTP_SERVER') }}"
+    smtp_port: "{{ lookup('env', 'SMTP_PORT') | int }}"
+    smtp_username: "{{ lookup('env', 'SMTP_USERNAME') }}"
+    smtp_password: "{{ lookup('env', 'SMTP_PASSWORD') }}"
   tasks:
     - name: Send email to approver
       community.general.mail:
@@ -27,4 +27,4 @@
 
           Best regards,
           Automation System
-        secure: starttls
+         secure: "{{ 'starttls' if lookup('env', 'USE_TLS') | bool else 'none' }}"
