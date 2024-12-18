@@ -27,4 +27,4 @@
 
           Best regards,
           Automation System
-         secure: "{{ 'starttls' if lookup('env', 'USE_TLS') | bool else 'none' }}"
+        secure: starttls
