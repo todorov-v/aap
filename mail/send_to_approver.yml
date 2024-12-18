@@ -21,10 +21,18 @@
           - "{{ approver_email }}"
         subject: "Please approve request number {{ request_number }}"
         body: |
-          Dear Approver,
+          Please approve the following request:
 
-          Please approve request number {{ request_number }}.
+          - **Hostname**: {{ hostname }}
+          - **IP Address**: {{ ipaddress }}
+          - **CPU**: {{ num_vcpus }} vCPUs
+          - **Memory**: {{ memory_mb }} MB
+          - **Disk Size**: {{ disk_size }} GB
+          - **Requestor**: {{ requestor_name }}
+
+          Kindly review the details and proceed with the approval.
 
           Best regards,
-          Automation System
+          Your Automation System
+
         secure: starttls
