@@ -1,30 +1,42 @@
 ---
-- name: Send email to approver
+- name: Send email to requestor
   hosts: localhost
   gather_facts: no
   vars:
-    approver_email: '{{ variable_user }}'
+    approver_email: "{{ lookup('env', 'SMTP_USERNAME') }}"
     request_number: "12345"
-    smtp_server: "smtp.office365.com"
-    smtp_port: 587
-    smtp_username: '{{ variable_user }}'
-    smtp_password: '{{ variable_pass }}'
+    smtp_server: "{{ lookup('env', 'SMTP_SERVER') }}"
+    smtp_port: "{{ lookup('env', 'SMTP_PORT') | int }}"
+    smtp_username: "{{ lookup('env', 'SMTP_USERNAME') }}"
+    smtp_password: "{{ lookup('env', 'SMTP_PASSWORD') }}"
+    hostname:  '{{ variable_hostname }}'
+    hostip:  "{{ variable_pass }}"
+    num_vcpus:  '{{ variable_vcpus }}'
+    memory_mb:  '{{ variable_vram }}'
+    requestor_name:  "{{ variable_requestor }}"
   tasks:
-    - name: Send email to approver
-      ansible.netcommon.smtp:
+    - name: Send email to requestor
+      community.general.mail:
         host: "{{ smtp_server }}"
         port: "{{ smtp_port }}"
         username: "{{ smtp_username }}"
         password: "{{ smtp_password }}"
         sender: "{{ smtp_username }}"
         to:
-          - "{{ recipient_email }}"
-        subject: "Please approve request number {{ request_number }}"
+          - "{{ requestor_name }}"
+        subject: "Request executed successfully {{ request_number }}"
         body: |
-          Dear Approver,
+          Dear requestor, 
+          Please be informed the following request is done:
 
-          Please approve request number {{ request_number }}.
+          - **Hostname**: {{ hostname }}
+          - **CPU**: {{ num_vcpus }} vCPUs
+          - **Memory**: {{ memory_mb }} MB
+          - **Requestor**: {{ requestor_name }}
+
+          Kindly remind to decomission unused reources.
 
           Best regards,
-          Automation System
+          Your Automation System
+
         secure: starttls
