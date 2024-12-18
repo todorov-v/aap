@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    hostname: "{{ variable_host }}"
+    hostname: "{{ variable_hostname }}"
     requestorname: "{{ variable_requestor }}"
     db_host: "127.0.0.1"        # MariaDB host
     db_user: "your_user"        # MariaDB username
