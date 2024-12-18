@@ -7,7 +7,7 @@
     - community.general  # For the mail module
   vars:
     hostname:  "{{ variable_hostname }}"
-    hostip:  {{ variable_pass }}
+    hostip:  "{{ variable_pass }}"
   tasks:
     - name: Write VM details to MariaDB
       community.mysql.mysql_query:
