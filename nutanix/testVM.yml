@@ -11,11 +11,11 @@
       nutanix_password: "{{ lookup('env', 'PRISM_CENTRAL_PASSWORD') }}"
       validate_certs: false
   vars:
-    hostname:  '{{ variable_hostname }}'
-    hostip:  "{{ variable_pass }}"
-    num_vcpus:  '{{ variable_vcpus }}'
-    memory_mb:  '{{ variable_vram }}'
-    requestor_name:  "{{ variable_requestor }}"
+    hostname:  "AnsibleDemo"
+    hostip:  "192.168.1.1"
+    num_vcpus:  "1"
+    memory_mb:  "2"
+    requestor_name:  "vladimir.todorov@tbs.tech"
   tasks:
   - name: Setting Variables
     set_fact:
