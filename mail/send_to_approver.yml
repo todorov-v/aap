@@ -10,7 +10,7 @@
     smtp_username: "{{ lookup('env', 'SMTP_USERNAME') }}"
     smtp_password: "{{ lookup('env', 'SMTP_PASSWORD') }}"
     hostname:  '{{ variable_hostname }}'
-    hostip:  '{{ variable_pass }}'
+    hostip:  "{{ variable_pass }}"
     num_vcpus:  '{{ variable_vcpus }}'
     memory_mb:  '{{ variable_vram }}'
     requestor_name:  '{{ variable_requestor }}'
