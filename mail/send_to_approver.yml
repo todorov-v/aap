@@ -11,14 +11,14 @@
     smtp_password: '{{ variable_pass }}'
   tasks:
     - name: Send email to approver
-      ansible.netcommon.smtp:
+      community.general.mail:
         host: "{{ smtp_server }}"
         port: "{{ smtp_port }}"
         username: "{{ smtp_username }}"
         password: "{{ smtp_password }}"
         sender: "{{ smtp_username }}"
         to:
-          - "{{ recipient_email }}"
+          - "{{ approver_email }}"
         subject: "Please approve request number {{ request_number }}"
         body: |
           Dear Approver,
