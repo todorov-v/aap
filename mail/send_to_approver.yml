@@ -3,12 +3,12 @@
   hosts: localhost
   gather_facts: no
   vars:
-    approver_email: "vladimir.todorov@tbs.tech"
+    approver_email: '{{ variable_user }}'
     request_number: "12345"
     smtp_server: "smtp.office365.com"
     smtp_port: 587
-    smtp_username: "vladimir.todorov@tbs.tech"
-    smtp_password: "ZBoiiioo2512CT"
+    smtp_username: '{{ variable_user }}'
+    smtp_password: '{{ variable_pass }}'
   tasks:
     - name: Send email to approver
       ansible.netcommon.smtp:
