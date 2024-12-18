@@ -11,15 +11,14 @@
     smtp_password: "ZBoiiioo2512CT"
   tasks:
     - name: Send email to approver
-      community.general.mail:
+      ansible.netcommon.smtp:
         host: "{{ smtp_server }}"
         port: "{{ smtp_port }}"
         username: "{{ smtp_username }}"
         password: "{{ smtp_password }}"
-        secure: starttls
-        from: "{{ smtp_username }}"
+        sender: "{{ smtp_username }}"
         to:
-          - "{{ approver_email }}"
+          - "{{ recipient_email }}"
         subject: "Please approve request number {{ request_number }}"
         body: |
           Dear Approver,
@@ -28,4 +27,4 @@
 
           Best regards,
           Automation System
-      delegate_to: localhost
+        secure: starttls
