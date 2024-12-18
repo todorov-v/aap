@@ -26,6 +26,7 @@
           - "{{ approver_email }}"
         subject: "Please approve request number {{ request_number }}"
         body: |
+          Dear approver, 
           Please approve the following request:
 
           - **Hostname**: {{ hostname }}
