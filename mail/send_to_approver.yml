@@ -31,7 +31,6 @@
           - **Hostname**: {{ hostname }}
           - **CPU**: {{ num_vcpus }} vCPUs
           - **Memory**: {{ memory_mb }} MB
-          - **Disk Size**: {{ disk_size }} GB
           - **Requestor**: {{ requestor_name }}
 
           Kindly review the details and proceed with the approval.
