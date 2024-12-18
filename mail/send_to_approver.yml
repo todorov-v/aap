@@ -13,7 +13,7 @@
     hostip:  "{{ variable_pass }}"
     num_vcpus:  '{{ variable_vcpus }}'
     memory_mb:  '{{ variable_vram }}'
-    requestor_name:  '{{ variable_requestor }}'
+    requestor_name:  "{{ variable_requestor }}"
   tasks:
     - name: Send email to approver
       community.general.mail:
