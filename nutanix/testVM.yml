@@ -16,7 +16,7 @@
     num_vcpus:  "1"
     memory_mb:  "2"
     requestor_name:  "vladimir.todorov@tbs.tech"
-    vm_os: "Rocky"
+    vm_os: "Rocky9.4"
   tasks:
   - name: Rewrite vm_os based on conditions
     set_fact:
@@ -40,7 +40,7 @@
         cluster_name: "CLS"
         script_path: ""
         subnet_name: 'TBS\|TEST\|Generic-44'
-        image_name: "Rocky 9.4 minimal"
+        image_name: "{{ vm_os }}"
         password: "12345678"
         fqdn: ""
 
