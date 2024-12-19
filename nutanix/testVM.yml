@@ -69,6 +69,8 @@
       vcpus: 1
       cores_per_vcpu: 1
       memory_gb: 1
+      boot:
+        type: "UEFI"
       guest_customization:
         type: "cloud_init"
         script_path: "./cloud_init.yml"
