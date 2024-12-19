@@ -62,7 +62,7 @@
               name: "{{cluster_name}}"
       disks:
         - type: "DISK"
-          size_gb: 40
+#          size_gb: 40
           bus: "SCSI"
           clone_image:
             name: "{{ image_name }}"
