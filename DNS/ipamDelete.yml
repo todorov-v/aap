@@ -1,0 +1,57 @@
+- name: Delete IP address record in phpIPAM
+  hosts: localhost
+  gather_facts: no
+  vars:
+    phpipam_api_url: "https://sf1-ipam.telelink.bg/api/ansible"  # API URL
+    phpipam_token: "lUyiiSJbFvUlahuIVfmJp0kmHKjehLAf"              # API token
+    subnet_id: 11                              # The ID of the subnet to query
+    name: "{{ variable_hostname }}"           # Hostname to identify the IP
+
+  tasks:
+    - name: Get all IP addresses in the subnet
+      uri:
+        url: "{{ phpipam_api_url }}/subnets/{{ subnet_id }}/addresses/"
+        method: GET
+        headers:
+          Content-Type: "application/json"
+          token: "{{ phpipam_token }}"
+        validate_certs: no
+        return_content: yes
+      register: ip_list_response
+
+    - name: Fail if unable to retrieve IP list
+      fail:
+        msg: "Failed to retrieve IP addresses in subnet {{ subnet_id }}! Response: {{ ip_list_response.json }}"
+      when: ip_list_response.status != 200 or not ip_list_response.json
+
+    - name: Find the IP record for the hostname
+      set_fact:
+        ip_to_delete: >-
+          {{
+            ip_list_response.json.data | selectattr('hostname', 'equalto', name) | map(attribute='id') | first | default('')
+          }}
+
+    - name: Fail if no matching IP record is found
+      fail:
+        msg: "No IP address found for hostname {{ name }} in subnet {{ subnet_id }}!"
+      when: ip_to_delete == ""
+
+    - name: Delete the IP record in phpIPAM
+      uri:
+        url: "{{ phpipam_api_url }}/addresses/{{ ip_to_delete }}/"
+        method: DELETE
+        headers:
+          Content-Type: "application/json"
+          token: "{{ phpipam_token }}"
+        validate_certs: no
+        return_content: yes
+      register: delete_ip_response
+
+    - name: Fail if IP deletion was unsuccessful
+      fail:
+        msg: "Failed to delete IP record for hostname {{ name }}! Response: {{ delete_ip_response.json }}"
+      when: delete_ip_response.status != 200
+
+    - name: Display deletion success message
+      debug:
+        msg: "Successfully deleted IP record for hostname {{ name }}."
