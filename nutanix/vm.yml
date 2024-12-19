@@ -14,28 +14,28 @@
     hostname:  '{{ variable_hostname }}'
     hostip:  "{{ variable_pass }}"
     num_vcpus:  '{{ variable_vcpus }}'
-    memory_mb:  '{{ variable_vram }}'
+    memory_gb:  '{{ variable_vram }}'
     requestor_name:  "{{ variable_requestor }}"
   tasks:  
   - name: Setting Variables
     set_fact:
         cluster_name: "CLS"
-        script_path: ""
         subnet_name: 'TBS\|TEST\|Generic-44'
         image_name: '{{ variable_os }}'
-        password: "12345678"
-        fqdn: ""
 
-  - name: Create Cloud-init Script file
-    copy:
-      dest: "cloud_init.yml"
-      content: |
-         #cloud-config
-         chpasswd:
-           list: |
-             root: "{{ password }}"
-             expire: False
-         fqdn: "{{ fqdn }}"
+  - name: Determine if the VM OS is Linux or Windows
+    set_fact:
+      is_linux: "{{ 'linux' in image_name.lower() }}"
+      is_windows: "{{ 'windows' in image_name.lower() }}"
+      
+  - name: Set boot type and customization method
+    set_fact:
+      boot_type: "{{ 'UEFI' if is_windows else 'LEGACY' | trim }}"
+      os_type: "{{ 'Windows' if is_windows else 'Linux' | trim }}"
+
+  - name: Debug boot_type
+    debug:
+      msg: "The boot type is set to {{ boot_type }}"
 
   - name: create Vm
     ntnx_vms:
@@ -43,8 +43,8 @@
       name: "{{ hostname }}"
       desc: "ansible_automation_platform"
       categories:
-        AppType:
-          - "Apache_Spark"
+        OSType:
+          - "{{os_type}}"
       cluster:
         name: "{{cluster_name}}"
       networks:
@@ -53,19 +53,17 @@
             name: "{{ subnet_name }}"
             cluster:
               name: "{{cluster_name}}"
+              private_ip: "{{ ip_address }}"
       disks:
         - type: "DISK"
-          size_gb: 40
-          bus: "SATA"
+          bus: "SCSI"
           clone_image:
             name: "{{ image_name }}"
-      vcpus: 1
+      vcpus: "{{ num_vcpus }}"
       cores_per_vcpu: 1
-      memory_gb: 1
-      guest_customization:
-        type: "cloud_init"
-        script_path: "./cloud_init.yml"
-        is_overridable: True
+      memory_gb:  "{{ memory_gb }}"
+      boot_config:
+        boot_type: "{{ boot_type }}"
     register: output
 
   - name: output of vm created
