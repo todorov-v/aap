@@ -90,9 +90,9 @@
       cores_per_vcpu: 1
       memory_gb: 1
       boot_config:
-        boot_type: '{{ boot_type }}'  # Set the boot type to UEFI
+        boot_type: "{{ boot_type }}"
       guest_customization:
-        type: '{{ customization_type }}'
+        type: "{{ customization_type }}"
         script_path: "./{{ customization_type }}.yml"
         is_overridable: True
       ip_address:
