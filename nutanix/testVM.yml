@@ -53,8 +53,10 @@
     set_fact:
       boot_type: >
         {% if is_windows %}
-        UEFI {% else %}
-        LEGACY {% endif %}
+        UEFI | trim 
+        {% else %}
+        LEGACY
+        {% endif %}
       customization_type: >
         {% if is_windows %}
         sysprep
