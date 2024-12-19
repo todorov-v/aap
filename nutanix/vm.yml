@@ -16,13 +16,13 @@
     num_vcpus:  '{{ variable_vcpus }}'
     memory_mb:  '{{ variable_vram }}'
     requestor_name:  "{{ variable_requestor }}"
-  tasks:
+  tasks:  
   - name: Setting Variables
     set_fact:
         cluster_name: "CLS"
         script_path: ""
         subnet_name: 'TBS\|TEST\|Generic-44'
-        image_name: "RHEL-disk001.vmdk"
+        image_name: '{{ variable_os }}'
         password: "12345678"
         fqdn: ""
 
@@ -41,7 +41,7 @@
     ntnx_vms:
       state: present
       name: "{{ hostname }}"
-      desc: "ansible_automation_demo"
+      desc: "ansible_automation_platform"
       categories:
         AppType:
           - "Apache_Spark"
@@ -51,8 +51,6 @@
         - is_connected: True
           subnet:
             name: "{{ subnet_name }}"
-            # mention cluster only when there are multiple subnets with same name accross clusters
-            # and subnet name is set above
             cluster:
               name: "{{cluster_name}}"
       disks:
