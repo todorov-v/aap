@@ -34,19 +34,19 @@
         script_path: ""
         subnet_name: 'TBS\|TEST\|Generic-44'
         image_name: "{{ vm_os }}"
-        admin_password: "P@ssw0rd"
-        fqdn: ""
+#        admin_password: "P@ssw0rd"
+ #       fqdn: ""
 
-  - name: Create Cloud-init Script file
-    copy:
-      dest: "cloud_init.yml"
-      content: |
-         #cloud-config
-         chpasswd:
-           list: |
-             root: "{{ admin_password }}"
-             expire: False
-         fqdn: "{{ fqdn }}"
+#  - name: Create Cloud-init Script file
+#    copy:
+#      dest: "cloud_init.yml"
+#      content: |
+#         #cloud-config
+#         chpasswd:
+#           list: |
+#             root: "{{ admin_password }}"
+#             expire: False
+#         fqdn: "{{ fqdn }}"
   - name: Determine if the VM OS is Linux or Windows
     set_fact:
       is_linux: "{{ 'linux' in vm_os.lower() }}"
@@ -61,17 +61,17 @@
     debug:
       msg: "The boot type is set to {{ boot_type }}"
 
-  - name: Generate sysprep file for Windows
-    template:
-        src: sysprep.xml.j2
-        dest: "/tmp/sysprep.xml"
-    when: "'Windows' in vm_os"
+#  - name: Generate sysprep file for Windows
+#    template:
+#        src: sysprep.xml.j2
+#        dest: "/tmp/sysprep.xml"
+#    when: "'Windows' in vm_os"
 
-  - name: Generate cloud-init file for Linux
-    template:
-        src: cloud_init.yml.j2
-        dest: "/tmp/cloud_init.yml"
-    when: "'Linux' in vm_os"
+#  - name: Generate cloud-init file for Linux
+#    template:
+#        src: cloud_init.yml.j2
+#        dest: "/tmp/cloud_init.yml"
+#    when: "'Linux' in vm_os"
 
   - name: create Vm
     ntnx_vms:
@@ -101,10 +101,10 @@
       memory_gb: 1
       boot_config:
         boot_type: "{{ boot_type }}"
-      guest_customization:
-        type: "{{ customization_type }}"
-        script_path: "/tmp/{{ customization_type }}.xml"
-        is_overridable: True
+#      guest_customization:
+#        type: "{{ customization_type }}"
+#        script_path: "/tmp/{{ customization_type }}.xml"
+#        is_overridable: True
     register: output
 
   - name: output of vm created

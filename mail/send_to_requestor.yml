@@ -15,6 +15,27 @@
     memory_mb:  '{{ variable_vram }}'
     requestor_name:  "{{ variable_requestor }}"
   tasks:
+    - name: Determine VM credentials based on OS
+      set_fact:
+        vm_user: >-
+          {% if 'rocky' in vm_os.lower() %}
+          root
+          {% elif 'ubuntu' in vm_os.lower() %}
+          cloud
+          {% elif 'windows' in vm_os.lower() %}
+          administrator
+          {% else %}
+          unknown
+          {% endif %}
+        vm_password: >-
+          {% if 'rocky' in vm_os.lower() or 'ubuntu' in vm_os.lower() %}
+          .root
+          {% elif 'windows' in vm_os.lower() %}
+          P@ssw0rd
+          {% else %}
+          unknown
+          {% endif %}
+
     - name: Send email to requestor
       community.general.mail:
         host: "{{ smtp_server }}"
@@ -33,6 +54,9 @@
           - **CPU**: {{ num_vcpus }} vCPUs
           - **Memory**: {{ memory_mb }} MB
           - **Requestor**: {{ requestor_name }}
+          - **OS**: {{ vm_os }}
+          - **User**: {{ vm_user }}
+          - **Password**: {{ vm_password }}
 
           Kindly remind to decomission unused reources.
 
