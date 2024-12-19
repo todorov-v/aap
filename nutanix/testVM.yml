@@ -71,7 +71,6 @@
       memory_gb: 1
       boot_config:
         boot_type: "UEFI"  # Set the boot type to UEFI
-        first_device: "DISK"  # Set the first boot device
       guest_customization:
         type: "cloud_init"
         script_path: "./cloud_init.yml"
