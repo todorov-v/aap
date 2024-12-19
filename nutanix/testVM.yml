@@ -52,7 +52,7 @@
   - name: Set boot type and customization method
     set_fact:
       boot_type: >
-        {% if is_windows %} 'UEFI' {% else %} 'LEGACY' {% endif %} customization_type: > {% if is_windows %} 'sysprep' {% else %} 'cloud_init' {% endif %}
+        {% if is_windows %} "UEFI" {% else %} "LEGACY" {% endif %} customization_type: > {% if is_windows %} "sysprep" {% else %} "cloud_init" {% endif %}
 
   - name: Debug boot_type
     debug:
