@@ -14,6 +14,7 @@
     num_vcpus:  '{{ variable_vcpus }}'
     memory_mb:  '{{ variable_vram }}'
     requestor_name:  "{{ variable_requestor }}"
+    vm_os: '{{ variable_os }}'
   tasks:
     - name: Determine VM credentials based on OS
       set_fact:
