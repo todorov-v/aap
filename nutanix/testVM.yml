@@ -64,6 +64,10 @@
         cloud_init
         {% endif %}
 
+  - name: Debug boot_type
+    debug:
+      msg: "The boot type is set to {{ boot_type }}"
+
   - name: create Vm
     ntnx_vms:
       state: present
