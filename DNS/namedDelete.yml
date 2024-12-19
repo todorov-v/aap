@@ -1,0 +1,48 @@
+---
+- name: Delete DNS record in BIND
+  hosts: all
+  become: yes
+  vars:
+    zone_file_path: "/etc/named/tbs.lab.zone"  # Adjust to your zone file location
+    dns_record_name: "{{ variable_hostname }}"    # Hostname of the DNS record to delete
+    dns_record_type: "A"                          # Record type to delete (e.g., A, CNAME)
+
+  tasks:
+    - name: Check the zone file exists
+      ansible.builtin.stat:
+        path: "{{ zone_file_path }}"
+      register: zone_file_check
+
+    - name: Fail if zone file does not exist
+      fail:
+        msg: "Zone file {{ zone_file_path }} does not exist!"
+      when: not zone_file_check.stat.exists
+
+    - name: Backup the original zone file
+      ansible.builtin.copy:
+        src: "{{ zone_file_path }}"
+        dest: "{{ zone_file_path }}.backup"
+        remote_src: yes
+
+    - name: Remove the DNS record from the zone file
+      ansible.builtin.replace:
+        path: "{{ zone_file_path }}"
+        regexp: "^{{ dns_record_name }}\\s+IN\\s+{{ dns_record_type }}.*$"
+        replace: ""
+      notify: reload rndc service to load new records
+
+    - name: Remove empty lines after deletion
+      ansible.builtin.replace:
+        path: "{{ zone_file_path }}"
+        regexp: "^\\s*$"
+        replace: ""
+
+    - name: Validate the zone file
+      ansible.builtin.command:
+        cmd: "named-checkzone example.org {{ zone_file_path }}"
+      register: validate_zone
+      failed_when: "'OK' not in validate_zone.stdout"
+
+  handlers:
+    - name: reload rndc service to load new records
+      shell: rndc freeze && rndc reload && rndc thaw
