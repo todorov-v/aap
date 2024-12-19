@@ -17,6 +17,10 @@
     memory_mb:  "2"
     requestor_name:  "vladimir.todorov@tbs.tech"
     vm_os: "Windows Server 2022 Eval-v1"
+    address: "192.168.1.1"
+    netmask: "255.255.255.0"
+    gateway: "192.168.1.1"
+    dns_servers: "192.168.173.101"
   tasks:
   - name: Debug the rewritten vm_os value
     debug:
@@ -41,6 +45,24 @@
              root: "{{ password }}"
              expire: False
          fqdn: "{{ fqdn }}"
+  - name: Determine if the VM OS is Linux or Windows
+    set_fact:
+      is_linux: "{{ 'linux' in vm_os.lower() }}"
+      is_windows: "{{ 'windows' in vm_os.lower() }}"
+   - name: Set boot type and customization method
+    set_fact:
+      boot_type: >
+        {% if is_windows %}
+        UEFI
+        {% else %}
+        LEGACY
+        {% endif %}
+      customization_type: >
+        {% if is_windows %}
+        sysprep
+        {% else %}
+        cloud_init
+        {% endif %}
 
   - name: create Vm
     ntnx_vms:
@@ -56,8 +78,6 @@
         - is_connected: True
           subnet:
             name: "{{ subnet_name }}"
-            # mention cluster only when there are multiple subnets with same name accross clusters
-            # and subnet name is set above
             cluster:
               name: "{{cluster_name}}"
       disks:
@@ -70,11 +90,16 @@
       cores_per_vcpu: 1
       memory_gb: 1
       boot_config:
-        boot_type: "UEFI"  # Set the boot type to UEFI
+        boot_type: "{{ boot_type }}"  # Set the boot type to UEFI
       guest_customization:
-        type: "cloud_init"
-        script_path: "./cloud_init.yml"
+        type: "{{ customization_type }}"
+        script_path: "./{{ customization_type }}.yml"
         is_overridable: True
+      ip_address:
+        address: "{{ ip_address }}"
+        netmask: "{{ netmask }}"
+        gateway: "{{ gateway }}"
+        dns_servers: "{{ dns_servers }}"
     register: output
 
   - name: output of vm created
