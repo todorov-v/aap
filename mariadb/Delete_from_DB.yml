@@ -1,0 +1,23 @@
+- name: Delete from MariaDB (CMDB)
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - community.mysql
+    - community.general  # For the mail module
+  vars:
+    hostname: "{{ variable_hostname }}"  # VM hostname to delete
+  tasks:
+    - name: Delete VM details from MariaDB
+      community.mysql.mysql_query:
+        login_host: "10.10.10.11"  # Replace with your MariaDB host
+        login_user: "{{ lookup('env', 'DB_USERNAME') }}"  # Replace with your MariaDB user
+        login_password: password  # Replace with your MariaDB password
+        login_db: "vm_inventory"
+        query: |
+          DELETE FROM vm_details
+          WHERE name = "{{ hostname }}";
+      register: delete_result
+
+    - name: Output deletion result
+      debug:
+        msg: "Deleted record for VM '{{ hostname }}' from MariaDB. Result: {{ delete_result }}."
