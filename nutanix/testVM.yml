@@ -92,7 +92,7 @@
       boot_config:
         boot_type: "{{ boot_type }}"  # Set the boot type to UEFI
       guest_customization:
-        type: "{{ customization_type }}"
+        type: '{{ customization_type }}'
         script_path: "./{{ customization_type }}.yml"
         is_overridable: True
       ip_address:
