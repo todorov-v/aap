@@ -22,6 +22,7 @@
     dns_servers: "192.168.173.101"
     product_key: "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"
     computer_name: "WindowsVM"
+    timezone: "UTC"
   tasks:
   - name: Debug the rewritten vm_os value
     debug:
@@ -62,8 +63,8 @@
 
   - name: Generate sysprep file for Windows
     template:
-        src: sysprep.yml.j2
-        dest: "/tmp/sysprep.yml"
+        src: sysprep.xml.j2
+        dest: "/tmp/sysprep.xml"
     when: "'Windows' in vm_os"
 
   - name: Generate cloud-init file for Linux
@@ -102,7 +103,7 @@
         boot_type: "{{ boot_type }}"
       guest_customization:
         type: "{{ customization_type }}"
-        script_path: "/tmp/{{ customization_type }}.yml"
+        script_path: "/tmp/{{ customization_type }}.xml"
         is_overridable: True
     register: output
 
