@@ -59,6 +59,18 @@
     debug:
       msg: "The boot type is set to {{ boot_type }}"
 
+  - name: Generate sysprep file for Windows
+    template:
+        src: sysprep.yml.j2
+        dest: "/tmp/sysprep.yml"
+    when: "'Windows' in vm_os"
+
+  - name: Generate cloud-init file for Linux
+    template:
+        src: cloud_init.yml.j2
+        dest: "/tmp/cloud_init.yml"
+    when: "'Linux' in vm_os"
+
   - name: create Vm
     ntnx_vms:
       state: present
@@ -89,7 +101,7 @@
         boot_type: "{{ boot_type }}"
       guest_customization:
         type: "{{ customization_type }}"
-        script_path: "./{{ customization_type }}.yml"
+        script_path: "/tmp/{{ customization_type }}.yml"
         is_overridable: True
     register: output
 
