@@ -49,20 +49,11 @@
     set_fact:
       is_linux: "{{ 'linux' in vm_os.lower() }}"
       is_windows: "{{ 'windows' in vm_os.lower() }}"
+      
   - name: Set boot type and customization method
     set_fact:
-      boot_type: >
-        {% if is_windows %}
-        UEFI | trim 
-        {% else %}
-        LEGACY
-        {% endif %}
-      customization_type: >
-        {% if is_windows %}
-        sysprep
-        {% else %}
-        cloud_init
-        {% endif %}
+      boot_type: "{{ 'UEFI' if is_windows else 'LEGACY' | trim }}"
+      customization_type: "{{ 'sysprep' if is_windows else 'cloud_init' | trim }}"
 
   - name: Debug boot_type
     debug:
