@@ -1,0 +1,38 @@
+- name: VM Deletion Playbook
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - nutanix.ncp
+  module_defaults:
+    group/nutanix.ncp.ntnx:
+      nutanix_host: "{{ lookup('env', 'PRISM_CENTRAL_URL') }}"
+      nutanix_username: "{{ lookup('env', 'PRISM_CENTRAL_USERNAME') }}"
+      nutanix_password: "{{ lookup('env', 'PRISM_CENTRAL_PASSWORD') }}"
+      validate_certs: false
+  vars:
+    hostname: '{{ variable_hostname }}'  # VM name to delete
+
+  tasks:
+    - name: Get VM details
+      ntnx_vms_info:
+        filter: "name=={{ hostname }}"
+      register: vm_info
+
+    - name: Check if VM exists
+      fail:
+        msg: "VM '{{ hostname }}' does not exist!"
+      when: vm_info.vms is not defined or vm_info.vms | length == 0
+
+    - name: Set VM UUID for deletion
+      set_fact:
+        vm_uuid: "{{ vm_info.vms[0].uuid }}"
+
+    - name: Delete VM
+      ntnx_vms:
+        state: absent
+        vm_uuid: "{{ vm_uuid }}"
+      register: delete_output
+
+    - name: Output deletion details
+      debug:
+        msg: "Successfully deleted VM '{{ hostname }}' with UUID '{{ vm_uuid }}'."
