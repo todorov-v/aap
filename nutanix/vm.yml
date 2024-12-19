@@ -53,7 +53,7 @@
             name: "{{ subnet_name }}"
             cluster:
               name: "{{cluster_name}}"
-              private_ip: "{{ ip_address }}"
+          private_ip: "{{ ip_address }}"              
       disks:
         - type: "DISK"
           bus: "SCSI"
