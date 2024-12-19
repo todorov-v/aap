@@ -75,7 +75,7 @@
             name: "{{ subnet_name }}"
             cluster:
               name: "{{cluster_name}}"
-          static_ip: "{{ ip_address }}"  # Assign static IP here              
+          private_ip: "{{ ip_address }}"              
       disks:
         - type: "DISK"
 #          size_gb: 40
