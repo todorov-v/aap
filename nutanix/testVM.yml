@@ -49,7 +49,7 @@
     set_fact:
       is_linux: "{{ 'linux' in vm_os.lower() }}"
       is_windows: "{{ 'windows' in vm_os.lower() }}"
-   - name: Set boot type and customization method
+  - name: Set boot type and customization method
     set_fact:
       boot_type: >
         {% if is_windows %}
