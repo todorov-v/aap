@@ -1,0 +1,36 @@
+---
+- name: Send email to requestor on deletion
+  hosts: localhost
+  gather_facts: no
+  vars:
+    approver_email: "{{ lookup('env', 'SMTP_USERNAME') }}"
+    request_number: "{{ lookup('env', 'tower_job_id') }}"
+    smtp_server: "{{ lookup('env', 'SMTP_SERVER') }}"
+    smtp_port: "{{ lookup('env', 'SMTP_PORT') | int }}"
+    smtp_username: "{{ lookup('env', 'SMTP_USERNAME') }}"
+    smtp_password: "{{ lookup('env', 'SMTP_PASSWORD') }}"
+    hostname:  '{{ variable_hostname }}'
+    requestor_name:  "{{ variable_requestor }}"
+  tasks:
+    - name: Send email to requestor
+      community.general.mail:
+        host: "{{ smtp_server }}"
+        port: "{{ smtp_port }}"
+        username: "{{ smtp_username }}"
+        password: "{{ smtp_password }}"
+        sender: "{{ smtp_username }}"
+        to:
+          - "{{ requestor_name }}"
+        subject: "Request executed successfully {{ request_number }}"
+        body: |
+          Dear {{ awx_user_first_name }}, 
+          Please be informed the following VM is deleted:
+
+          - **Hostname**: {{ hostname }}
+
+          Thank you.
+
+          Best regards,
+          Your Automation System
+
+        secure: starttls
