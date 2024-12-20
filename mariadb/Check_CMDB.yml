@@ -31,7 +31,7 @@
         login_user: "{{ lookup('env', 'DB_USERNAME') }}"
         login_password: "{{ lookup('env', 'DB_PASSWORD') }}"
         login_db: "{{ lookup('env', 'DB_NAME') }}"
-        query: "SELECT COUNT(*) AS user_vm_count FROM vm_details WHERE requestor_name = '{{ requestor_name }}@tbs.tech';"
+        query: "SELECT COUNT(*) AS user_vm_count FROM vm_details WHERE TRIM(requestor_name) = '{{ requestor_name }}@tbs.tech';"
       register: user_vm_count_result
 
     - name: Inspect the full structure of user_vm_count_result
