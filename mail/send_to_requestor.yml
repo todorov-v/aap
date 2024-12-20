@@ -4,7 +4,7 @@
   gather_facts: no
   vars:
     approver_email: "{{ lookup('env', 'SMTP_USERNAME') }}"
-    request_number: "{{ lookup('env', 'tower_job_id') }}"
+    request_number: "{{ lookup('env', 'awx_job_template_id') }}"
     smtp_server: "{{ lookup('env', 'SMTP_SERVER') }}"
     smtp_port: "{{ lookup('env', 'SMTP_PORT') | int }}"
     smtp_username: "{{ lookup('env', 'SMTP_USERNAME') }}"
