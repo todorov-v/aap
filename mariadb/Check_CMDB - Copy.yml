@@ -1,0 +1,41 @@
+---
+- name: Check if VM name exists in MariaDB
+  hosts: localhost
+  gather_facts: no
+  vars:
+    hostname: "{{ variable_hostname }}"
+ #   requestorname: "{{ variable_requestor }}"
+
+  tasks:
+    - name: Check if the VM name exists in the database
+      community.mysql.mysql_query:
+        login_host: "10.10.10.11"
+        login_user: "{{ lookup('env', 'DB_USERNAME') }}"
+        login_password: "{{ lookup('env', 'DB_PASSWORD') }}"
+        login_db: "{{ lookup('env', 'DB_NAME') }}"
+        query: "SELECT COUNT(*) AS vm_count FROM vm_details WHERE name = '{{ hostname }}';"
+      register: vm_check_result
+
+
+    - name: Inspect the full structure of vm_check_result
+      debug:
+        var: vm_check_result
+
+    - name: Debug the result if VM exists
+      debug:
+        msg: "VM name '{{ hostname }}' exists in the database."
+      when: vm_check_result.query_result[0][0]["vm_count"] > 0
+
+    - name: Debug the result if VM does not exist
+      debug:
+        msg: "VM name '{{ hostname }}' does not exist in the database."
+      when: vm_check_result.query_result[0][0]["vm_count"] == 0
+      
+    - name: Display the username
+      debug:
+        msg: "This job was started by {{ awx_user_name }}@tbs.tech"
+        
+    - name: Set Stats
+      set_stats:
+        data:
+          variable_requestor: "{{ awx_user_name }}@tbs.tech"
