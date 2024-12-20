@@ -1,0 +1,27 @@
+---
+- name: Delete VM Snapshot in Nutanix
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - nutanix.ncp
+  module_defaults:
+    group/nutanix.ncp.ntnx:
+      nutanix_host: "{{ lookup('env', 'PRISM_CENTRAL_URL') }}"
+      nutanix_username: "{{ lookup('env', 'PRISM_CENTRAL_USERNAME') }}"
+      nutanix_password: "{{ lookup('env', 'PRISM_CENTRAL_PASSWORD') }}"
+      validate_certs: false
+
+  vars:
+    snapshot_uuid: "{{ variable_snapshot_uuid }}"  # Snapshot UUID to delete
+    vm_name: "{{ variable_vm_name }}"  # VM name (for reference/logging)
+
+  tasks:
+    - name: Delete the snapshot
+      ntnx_vm_snapshots:
+        state: absent
+        uuid: "{{ snapshot_uuid }}"
+      register: deletion_result
+
+    - name: Debug deletion result
+      debug:
+        msg: "Snapshot for VM '{{ vm_name }}' with UUID '{{ snapshot_uuid }}' has been deleted successfully."

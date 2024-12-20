@@ -1,0 +1,43 @@
+---
+- name: Nutanix Workflow to Create VM Snapshot and Schedule Deletion in AAP
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - nutanix.ncp
+    - ansible.tower  # For scheduling workflows in AAP
+  module_defaults:
+    group/nutanix.ncp.ntnx:
+      nutanix_host: "{{ lookup('env', 'PRISM_CENTRAL_URL') }}"
+      nutanix_username: "{{ lookup('env', 'PRISM_CENTRAL_USERNAME') }}"
+      nutanix_password: "{{ lookup('env', 'PRISM_CENTRAL_PASSWORD') }}"
+      validate_certs: false
+
+  vars:
+    vm_name: "{{ variable_vm_name }}"  # The name of the VM for which to create a snapshot
+    snapshot_name: "{{ vm_name }}-snapshot-{{ ansible_date_time.iso8601_basic }}"  # Unique snapshot name
+    snapshot_description: "Snapshot created by Ansible on {{ ansible_date_time.date }}"
+    delete_snapshot_time: "2024-12-20T03:00:00Z"  # Time to schedule deletion (in UTC)
+    deletion_workflow_id: 42  # Replace with the AAP workflow template ID for snapshot deletion
+
+  tasks:
+    - name: Create a snapshot of the VM
+      ntnx_vm_snapshots:
+        state: present
+        vm_uuid: "{{ vm_info.vms[0].uuid }}"
+        name: "{{ snapshot_name }}"
+        description: "{{ snapshot_description }}"
+      register: snapshot_info
+
+    - name: Schedule snapshot deletion in AAP
+      tower_job_launch:
+        job_template: "{{ deletion_workflow_id }}"
+        wait: false
+        survey_enabled: true
+        extra_vars:
+          variable_snapshot_uuid: "{{ snapshot_info.snapshot.uuid }}"
+          variable_vm_name: "{{ vm_name }}"
+      register: schedule_result
+
+    - name: Debug scheduled deletion workflow result
+      debug:
+        msg: "Deletion workflow scheduled with job ID '{{ schedule_result.job.id }}' for snapshot '{{ snapshot_name }}'."
