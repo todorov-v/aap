@@ -52,13 +52,13 @@
           Please be informed the following request is done:
 
           - **Hostname**: {{ hostname }}
-          - **IP Address**: {{ hostip }}
           - **CPU**: {{ num_vcpus }} vCPUs
           - **Memory**: {{ memory_mb }} GB
           - **Requestor**: {{ requestor_name }}
           - **OS**: {{ vm_os }}
           - **User**: {{ vm_user }}
           - **Password**: {{ vm_password }}
+          - **IP Address**: {{ hostip }}
 
           Kindly remind to decomission unused reources.
 

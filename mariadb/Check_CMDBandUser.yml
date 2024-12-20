@@ -1,0 +1,39 @@
+---
+- name: Validate VM existence and ownership in MariaDB
+  hosts: localhost
+  gather_facts: no
+  vars:
+    hostname: "{{ variable_hostname }}"
+    requestor_name: "{{ awx_user_name }}"  # Assuming awx_user_name is defined or available
+
+  tasks:
+    - name: Check if the VM exists in the database
+      community.mysql.mysql_query:
+        login_host: "10.10.10.11"
+        login_user: "{{ lookup('env', 'DB_USERNAME') }}"
+        login_password: "{{ lookup('env', 'DB_PASSWORD') }}"
+        login_db: "{{ lookup('env', 'DB_NAME') }}"
+        query: |
+          SELECT COUNT(*) AS vm_count, 
+                 COUNT(CASE WHEN requestor_name = '{{ requestor_name }}' THEN 1 END) AS user_vm_count
+          FROM vm_details
+          WHERE LOWER(TRIM(name)) = LOWER(TRIM('{{ hostname }}'));
+      register: vm_check_result
+
+    - name: Inspect the query result structure
+      debug:
+        var: vm_check_result
+
+    - name: Fail if VM does not exist in the database
+      fail:
+        msg: "VM '{{ hostname }}' does not exist in the database!"
+      when: vm_check_result.query_result[0][0]["vm_count"] == 0
+
+    - name: Fail if VM exists but does not belong to the requestor
+      fail:
+        msg: "VM '{{ hostname }}' exists but does not belong to user '{{ requestor_name }}'."
+      when: vm_check_result.query_result[0][0]["user_vm_count"] == 0
+
+    - name: Success message
+      debug:
+        msg: "VM '{{ hostname }}' belongs to user '{{ requestor_name }}'. Validation successful."
