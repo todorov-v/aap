@@ -4,7 +4,7 @@
   gather_facts: no
   vars:
     hostname: "{{ variable_hostname }}"
-    requestor_name: "{{ awx_user_name }}"  # Assuming awx_user_name is defined or available
+    requestor_name: "{{ awx_user_name }}@tbs.tech"  # Assuming awx_user_name is defined or available
 
   tasks:
     - name: Check if the VM exists in the database
