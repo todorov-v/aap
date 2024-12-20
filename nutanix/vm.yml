@@ -41,6 +41,7 @@
     ntnx_vms:
       state: present
       name: "{{ hostname }}"
+      owner: "{{ requestor_name }}"
       desc: "ansible_automation_platform"
       categories:
         OSType:
