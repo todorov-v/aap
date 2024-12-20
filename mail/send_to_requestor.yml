@@ -48,7 +48,7 @@
           - "{{ requestor_name }}"
         subject: "Request executed successfully {{ request_number }}"
         body: |
-          Dear "{{ awx_user.first_name }}", 
+          Dear "{{ awx_user_first_name }}", 
           Please be informed the following request is done:
 
           - **Hostname**: {{ hostname }}
