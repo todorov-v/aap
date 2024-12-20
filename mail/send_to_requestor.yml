@@ -4,7 +4,7 @@
   gather_facts: no
   vars:
     approver_email: "{{ lookup('env', 'SMTP_USERNAME') }}"
-    request_number: "12345"
+    request_number: "{{ lookup('env', 'tower_job_id') }}"
     smtp_server: "{{ lookup('env', 'SMTP_SERVER') }}"
     smtp_port: "{{ lookup('env', 'SMTP_PORT') | int }}"
     smtp_username: "{{ lookup('env', 'SMTP_USERNAME') }}"
@@ -48,10 +48,11 @@
           - "{{ requestor_name }}"
         subject: "Request executed successfully {{ request_number }}"
         body: |
-          Dear requestor, 
+          Dear "{{ awx_user }}", 
           Please be informed the following request is done:
 
           - **Hostname**: {{ hostname }}
+          - **IP Address**: {{ hostip }}
           - **CPU**: {{ num_vcpus }} vCPUs
           - **Memory**: {{ memory_mb }} MB
           - **Requestor**: {{ requestor_name }}
