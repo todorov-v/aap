@@ -13,7 +13,7 @@
       validate_certs: false
 
   vars:
-    vm_name: "{{ variable_vm_name }}"  # The name of the VM for which to create a snapshot
+    vm_name: "{{ variable_hostname }}"  # The name of the VM for which to create a snapshot
     snapshot_name: "{{ vm_name }}-snapshot-{{ ansible_date_time.iso8601_basic }}"  # Unique snapshot name
     snapshot_description: "Snapshot created by Ansible on {{ ansible_date_time.date }}"
     delete_snapshot_time: "2024-12-20T03:00:00Z"  # Time to schedule deletion (in UTC)
