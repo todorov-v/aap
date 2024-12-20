@@ -1,10 +1,10 @@
 ---
-- name: Check if VM name exists in MariaDB and count VMs for the user
+- name: Check if VM name exists in MariaDB and fail if it does, also count all VMs for the user
   hosts: localhost
   gather_facts: no
   vars:
     hostname: "{{ variable_hostname }}"
-    requestor_name: "{{ awx_user_name }}"
+    requestor_name: "{{ awx_user_name }}"  
 
   tasks:
     - name: Check if the VM name exists in the database
@@ -13,11 +13,7 @@
         login_user: "{{ lookup('env', 'DB_USERNAME') }}"
         login_password: "{{ lookup('env', 'DB_PASSWORD') }}"
         login_db: "{{ lookup('env', 'DB_NAME') }}"
-        query: |
-          SELECT COUNT(*) AS vm_count, 
-                 SUM(CASE WHEN requestor_name = '{{ requestor_name }}' THEN 1 ELSE 0 END) AS user_vm_count
-          FROM vm_details 
-          WHERE name = '{{ hostname }}' OR requestor_name = '{{ requestor_name }}';
+        query: "SELECT COUNT(*) AS vm_count FROM vm_details WHERE name = '{{ hostname }}';"
       register: vm_check_result
 
     - name: Inspect the full structure of vm_check_result
@@ -29,18 +25,22 @@
         msg: "VM name '{{ hostname }}' already exists in the database!"
       when: vm_check_result.query_result[0][0]["vm_count"] > 0
 
-    - name: Set the count of VMs belonging to the user
-      set_fact:
-        user_vm_count: "{{ vm_check_result.query_result[0][0]['user_vm_count'] }}"
+    - name: Query to count all VMs belonging to the user
+      community.mysql.mysql_query:
+        login_host: "10.10.10.11"
+        login_user: "{{ lookup('env', 'DB_USERNAME') }}"
+        login_password: "{{ lookup('env', 'DB_PASSWORD') }}"
+        login_db: "{{ lookup('env', 'DB_NAME') }}"
+        query: "SELECT COUNT(*) AS user_vm_count FROM vm_details WHERE requestor_name = '{{ requestor_name }}@tbs.tech';"
+      register: user_vm_count_result
 
-    - name: Display the count of VMs belonging to the user
+    - name: Inspect the full structure of user_vm_count_result
       debug:
-        msg: "The number of VMs belonging to the user '{{ requestor_name }}' is {{ user_vm_count }}."
+        var: user_vm_count_result
 
-    - name: Debug the result if VM does not exist
+    - name: Display the number of VMs belonging to the user
       debug:
-        msg: "VM name '{{ hostname }}' does not exist in the database."
-      when: vm_check_result.query_result[0][0]["vm_count"] == 0
+        msg: "User {{ requestor_name }} has {{ user_vm_count_result.query_result[0][0]['user_vm_count'] }} VMs in the database."
 
     - name: Display the username
       debug:
@@ -50,4 +50,3 @@
       set_stats:
         data:
           variable_requestor: "{{ awx_user_name }}@tbs.tech"
-          user_vm_count: "{{ awx_user_name }}"
