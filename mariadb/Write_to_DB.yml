@@ -14,10 +14,11 @@
   tasks:
     - name: Write VM details to MariaDB
       community.mysql.mysql_query:
-        login_host: "10.10.10.11"    # Replace with your MariaDB host
+        login_host: "{{ lookup('env', 'DB_HOST') }}"    # Replace with your MariaDB host
         login_user: "{{ lookup('env', 'DB_USERNAME') }}"    # Replace with your MariaDB user
         login_password: password  # Replace with your MariaDB password
         login_db: "vm_inventory"
+        login_port: "{{ lookup('env', 'DB_PORT') }}"
         query: |
           INSERT INTO vm_details (name, memory_mb, num_vcpus, ip_address, requestor_name)
           VALUES ("{{ hostname }}", "{{ memory_mb }}", "{{ num_vcpus }}", "{{ hostip }}", "{{ requestor_name }}");
