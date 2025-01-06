@@ -9,7 +9,7 @@
   tasks:
     - name: Check if the VM name exists in the database
       community.mysql.mysql_query:
-        login_host: "10.10.10.11"
+        login_host:  "{{ lookup('env', 'DB_HOST') }}"
         login_user: "{{ lookup('env', 'DB_USERNAME') }}"
         login_password: "{{ lookup('env', 'DB_PASSWORD') }}"
         login_db: "{{ lookup('env', 'DB_NAME') }}"
