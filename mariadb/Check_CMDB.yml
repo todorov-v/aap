@@ -27,7 +27,7 @@
 
     - name: Query to count all VMs belonging to the user
       community.mysql.mysql_query:
-        login_host:"{{ lookup('env', 'DB_HOST') }}"
+        login_host: "{{ lookup('env', 'DB_HOST') }}"
         login_user: "{{ lookup('env', 'DB_USERNAME') }}"
         login_password: "{{ lookup('env', 'DB_PASSWORD') }}"
         login_db: "{{ lookup('env', 'DB_NAME') }}"
